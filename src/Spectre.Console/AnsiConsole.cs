@@ -1,78 +1,102 @@
-namespace Spectre.Console;
-
-/// <summary>
-/// A console capable of writing ANSI escape sequences.
-/// </summary>
-public static partial class AnsiConsole
+namespace Spectre.Console
 {
+    /// <summary>
+    /// A console capable of writing ANSI escape sequences.
+    /// </summary>
+    public static partial class AnsiConsole
+    {
 #pragma warning disable CS0618 // 'AnsiConsoleFactory' is obsolete
-    private static readonly AnsiConsoleFactory _factory = new AnsiConsoleFactory();
+        private static readonly AnsiConsoleFactory _factory = new AnsiConsoleFactory();
 #pragma warning restore CS0618
 
-    private static Recorder? _recorder;
-    private static Lazy<IAnsiConsole> _console = new Lazy<IAnsiConsole>(
-        () =>
-        {
-            var console = Create(new AnsiConsoleSettings
+        private static Recorder? _recorder;
+        private static Lazy<IAnsiConsole> _console = new Lazy<IAnsiConsole>(
+            () =>
             {
-                Ansi = AnsiSupport.Detect,
-                ColorSystem = ColorSystemSupport.Detect,
-                Out = new AnsiConsoleOutput(System.Console.Out),
+                var console = Create(new AnsiConsoleSettings
+                {
+                    Ansi = AnsiSupport.Detect,
+                    ColorSystem = ColorSystemSupport.Detect,
+                    Out = new AnsiConsoleOutput(System.Console.Out),
+                });
+
+                Created = true;
+                return console;
             });
 
-            Created = true;
-            return console;
-        });
-
-    /// <summary>
-    /// Gets or sets the underlying <see cref="IAnsiConsole"/>.
-    /// </summary>
-    public static IAnsiConsole Console
-    {
-        get
+        /// <summary>
+        /// Gets or sets the underlying <see cref="IAnsiConsole"/>.
+        /// </summary>
+        public static IAnsiConsole Console
         {
-            return _recorder ?? _console.Value;
-        }
-        set
-        {
-            _console = new Lazy<IAnsiConsole>(() => value);
-
-            if (_recorder != null)
+            get
             {
-                // Recreate the recorder
-                _recorder = _recorder.Clone(value);
+                return _recorder ?? _console.Value;
+            }
+            set
+            {
+                _console = new Lazy<IAnsiConsole>(() => value);
+
+                if (_recorder != null)
+                {
+                    // Recreate the recorder
+                    _recorder = _recorder.Clone(value);
+                }
+
+                Created = true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IAnsiConsoleCursor"/>.
+        /// </summary>
+        public static IAnsiConsoleCursor Cursor => _recorder?.Cursor ?? _console.Value.Cursor;
+
+        /// <summary>
+        /// Gets the console profile.
+        /// </summary>
+        public static Profile Profile => Console.Profile;
+
+        /// <summary>
+        /// Creates a new <see cref="IAnsiConsole"/> instance
+        /// from the provided settings.
+        /// </summary>
+        /// <param name="settings">The settings to use.</param>
+        /// <returns>An <see cref="IAnsiConsole"/> instance.</returns>
+        public static IAnsiConsole Create(AnsiConsoleSettings settings)
+        {
+            return _factory.Create(settings);
+        }
+
+        /// <summary>
+        /// Clears the console.
+        /// </summary>
+        public static void Clear()
+        {
+            Console.Clear();
+        }
+
+        /// <summary>
+        /// Displays a prompt to the user for multiline input.
+        /// </summary>
+        /// <param name="prompt">The prompt markup text.</param>
+        /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
+        /// <returns>The multiline input result.</returns>
+        public static string AskMultiLine(string prompt, string endDelimiter)
+        {
+            AnsiConsole.MarkupLine(prompt);
+            var input = new StringBuilder();
+            string? line;
+            while ((line = AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
+            {
+                if (line.Trim() == endDelimiter)
+                {
+                    break;
+                }
+                input.AppendLine(line);
             }
 
-            Created = true;
+            return input.ToString();
         }
-    }
-
-    /// <summary>
-    /// Gets the <see cref="IAnsiConsoleCursor"/>.
-    /// </summary>
-    public static IAnsiConsoleCursor Cursor => _recorder?.Cursor ?? _console.Value.Cursor;
-
-    /// <summary>
-    /// Gets the console profile.
-    /// </summary>
-    public static Profile Profile => Console.Profile;
-
-    /// <summary>
-    /// Creates a new <see cref="IAnsiConsole"/> instance
-    /// from the provided settings.
-    /// </summary>
-    /// <param name="settings">The settings to use.</param>
-    /// <returns>An <see cref="IAnsiConsole"/> instance.</returns>
-    public static IAnsiConsole Create(AnsiConsoleSettings settings)
-    {
-        return _factory.Create(settings);
-    }
-
-    /// <summary>
-    /// Clears the console.
-    /// </summary>
-    public static void Clear()
-    {
-        Console.Clear();
     }
 }
