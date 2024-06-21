@@ -82,13 +82,14 @@ namespace Spectre.Console
         /// <param name="prompt">The prompt markup text.</param>
         /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
         /// <returns>The multiline input result.</returns>
-        public static string AskMultiLine(string prompt, string endDelimiter)
+        public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
         {
             AnsiConsole.MarkupLine(prompt);
             var input = new StringBuilder();
             string? line;
-            while ((line = AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
+            while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
             {
+                Console.WriteLine($"DEBUG: Read line: '{line}'");
                 if (line.Trim() == endDelimiter)
                 {
                     break;
