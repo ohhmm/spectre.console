@@ -89,7 +89,6 @@ namespace Spectre.Console
             string? line;
             while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
             {
-                Console.WriteLine($"DEBUG: Read line: '{line}'");
                 if (line.Trim() == endDelimiter)
                 {
                     break;
