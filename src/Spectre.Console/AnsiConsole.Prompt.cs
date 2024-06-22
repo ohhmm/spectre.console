@@ -60,4 +60,27 @@ public static partial class AnsiConsole
         }
         .Show(Console);
     }
+
+    /// <summary>
+    /// Displays a prompt to the user for multiline input.
+    /// </summary>
+    /// <param name="prompt">The prompt markup text.</param>
+    /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
+    /// <returns>The multiline input result.</returns>
+    public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
+    {
+        AnsiConsole.MarkupLine(prompt);
+        var input = new StringBuilder();
+        string? line;
+        while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
+        {
+            if (line.Trim() == endDelimiter)
+            {
+                break;
+            }
+            input.AppendLine(line);
+        }
+
+        return input.ToString();
+    }
 }
