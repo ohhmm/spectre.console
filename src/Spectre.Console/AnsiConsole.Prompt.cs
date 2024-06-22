@@ -54,7 +54,10 @@ namespace Spectre.Console
         /// <returns>The multiline input result.</returns>
         public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
         {
-            AnsiConsole.MarkupLine(prompt);
+            var textPrompt = new TextPrompt<string>(prompt)
+                .PromptStyle("green")
+                .ValidationErrorMessage("[red]Invalid input[/]");
+
             var input = new StringBuilder();
             string? line;
             while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
