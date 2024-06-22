@@ -1,109 +1,87 @@
-namespace Spectre.Console;
-
-/// <summary>
-/// A console capable of writing ANSI escape sequences.
-/// </summary>
-public static partial class AnsiConsole
+namespace Spectre.Console
 {
     /// <summary>
-    /// Displays a prompt to the user.
+    /// A console capable of writing ANSI escape sequences.
     /// </summary>
-    /// <typeparam name="T">The prompt result type.</typeparam>
-    /// <param name="prompt">The prompt to display.</param>
-    /// <returns>The prompt input result.</returns>
-    public static T Prompt<T>(IPrompt<T> prompt)
+    public static partial class AnsiConsole
     {
-        if (prompt is null)
+        /// <summary>
+        /// Displays a prompt to the user.
+        /// </summary>
+        /// <typeparam name="T">The prompt result type.</typeparam>
+        /// <param name="prompt">The prompt to display.</param>
+        /// <returns>The prompt input result.</returns>
+        public static T Prompt<T>(IPrompt<T> prompt)
         {
-            throw new ArgumentNullException(nameof(prompt));
+            if (prompt is null)
+            {
+                throw new ArgumentNullException(nameof(prompt));
+            }
+
+            return prompt.Show(Console);
         }
 
-        return prompt.Show(Console);
-    }
+        /// <summary>
+        /// Displays a prompt to the user.
+        /// </summary>
+        /// <typeparam name="T">The prompt result type.</typeparam>
+        /// <param name="prompt">The prompt markup text.</param>
+        /// <returns>The prompt input result.</returns>
+        public static T Ask<T>(string prompt)
+        {
+            return new TextPrompt<T>(prompt).Show(Console);
+        }
 
-    /// <summary>
-    /// Displays a prompt to the user.
-    /// </summary>
-    /// <typeparam name="T">The prompt result type.</typeparam>
-    /// <param name="prompt">The prompt markup text.</param>
-    /// <returns>The prompt input result.</returns>
-    public static T Ask<T>(string prompt)
-    {
-        return new TextPrompt<T>(prompt).Show(Console);
-    }
+        /// <summary>
+        /// Displays a prompt to the user with a given default.
+        /// </summary>
+        /// <typeparam name="T">The prompt result type.</typeparam>
+        /// <param name="prompt">The prompt markup text.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>The prompt input result.</returns>
+        public static T Ask<T>(string prompt, T defaultValue)
+        {
+            return new TextPrompt<T>(prompt)
+                .DefaultValue(defaultValue)
+                .Show(Console);
+        }
 
-    /// <summary>
-    /// Displays a prompt to the user with a given default.
-    /// </summary>
-    /// <typeparam name="T">The prompt result type.</typeparam>
-    /// <param name="prompt">The prompt markup text.</param>
-    /// <param name="defaultValue">The default value.</param>
-    /// <returns>The prompt input result.</returns>
-    public static T Ask<T>(string prompt, T defaultValue)
-    {
-        return new TextPrompt<T>(prompt)
-            .DefaultValue(defaultValue)
+        /// <summary>
+        /// Displays a prompt to the user for multiline input.
+        /// </summary>
+        /// <param name="prompt">The prompt markup text.</param>
+        /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
+        /// <returns>The multiline input result.</returns>
+        public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
+        {
+            AnsiConsole.MarkupLine(prompt);
+            var input = new StringBuilder();
+            string? line;
+            while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
+            {
+                if (line.Trim() == endDelimiter)
+                {
+                    break;
+                }
+                input.AppendLine(line);
+            }
+
+            return input.ToString();
+        }
+
+        /// <summary>
+        /// Displays a prompt with two choices, yes or no.
+        /// </summary>
+        /// <param name="prompt">The prompt markup text.</param>
+        /// <param name="defaultValue">Specifies the default answer.</param>
+        /// <returns><c>true</c> if the user selected "yes", otherwise <c>false</c>.</returns>
+        public static bool Confirm(string prompt, bool defaultValue = true)
+        {
+            return new ConfirmationPrompt(prompt)
+            {
+                DefaultValue = defaultValue,
+            }
             .Show(Console);
-    }
-
-    /// <summary>
-    /// Displays a prompt to the user for multiline input.
-    /// </summary>
-    /// <param name="prompt">The prompt markup text.</param>
-    /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
-    /// <returns>The multiline input result.</returns>
-    public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
-    {
-        AnsiConsole.MarkupLine(prompt);
-        var input = new StringBuilder();
-        string? line;
-        while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
-        {
-            if (line.Trim() == endDelimiter)
-            {
-                break;
-            }
-            input.AppendLine(line);
         }
-
-        return input.ToString();
-    }
-
-    /// <summary>
-    /// Displays a prompt with two choices, yes or no.
-    /// </summary>
-    /// <param name="prompt">The prompt markup text.</param>
-    /// <param name="defaultValue">Specifies the default answer.</param>
-    /// <returns><c>true</c> if the user selected "yes", otherwise <c>false</c>.</returns>
-    public static bool Confirm(string prompt, bool defaultValue = true)
-    {
-        return new ConfirmationPrompt(prompt)
-        {
-            DefaultValue = defaultValue,
-        }
-        .Show(Console);
-    }
-
-    /// <summary>
-    /// Displays a prompt to the user for multiline input.
-    /// </summary>
-    /// <param name="prompt">The prompt markup text.</param>
-    /// <param name="endDelimiter">The delimiter to end the multiline input.</param>
-    /// <returns>The multiline input result.</returns>
-    public static async Task<string> AskMultiLine(string prompt, string endDelimiter)
-    {
-        AnsiConsole.MarkupLine(prompt);
-        var input = new StringBuilder();
-        string? line;
-        while ((line = await AnsiConsoleExtensions.ReadLine(Console, new Style(), false, null, null, default)) != null)
-        {
-            if (line.Trim() == endDelimiter)
-            {
-                break;
-            }
-            input.AppendLine(line);
-        }
-
-        return input.ToString();
     }
 }
