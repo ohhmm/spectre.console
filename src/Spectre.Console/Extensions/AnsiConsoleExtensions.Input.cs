@@ -70,7 +70,7 @@ namespace Spectre.Console
                             else
                             {
                                 // Move to the end of the previous line
-                                var lastNewLineIndex = text.LastIndexOf('\n', text.Length - 1);
+                                var lastNewLineIndex = text.LastIndexOf('\n', text.Length);
                                 if (lastNewLineIndex >= 0)
                                 {
                                     cursorLeft = text.Length - lastNewLineIndex - 1;
