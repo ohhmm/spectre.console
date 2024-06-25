@@ -74,11 +74,19 @@ namespace Spectre.Console
                                 lastNewLineIndex = text.LastIndexOf('\n', text.Length - 1);
                                 if (lastNewLineIndex >= 0)
                                 {
-                                    cursorLeft = text.Length - lastNewLineIndex - 1;
+                                    var secondLastNewLineIndex = text.LastIndexOf('\n', lastNewLineIndex - 1);
+                                    if (secondLastNewLineIndex >= 0)
+                                    {
+                                        cursorLeft = lastNewLineIndex - secondLastNewLineIndex - 1;
+                                    }
+                                    else
+                                    {
+                                        cursorLeft = lastNewLineIndex;
+                                    }
                                 }
                                 else
                                 {
-                                    cursorLeft = text.Length;
+                                    cursorLeft = 0; // Move to the start of the current line
                                 }
                             }
                         }
