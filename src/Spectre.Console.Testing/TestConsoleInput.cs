@@ -92,4 +92,13 @@ public sealed class TestConsoleInput : IAnsiConsoleInput
     {
         return Task.FromResult(ReadKey(intercept));
     }
+
+    /// <summary>
+    /// Gets the current state of the input buffer as a string.
+    /// </summary>
+    /// <returns>The input buffer content as a string.</returns>
+    public string GetInputBuffer()
+    {
+        return new string(_input.Select(keyInfo => keyInfo.KeyChar).ToArray());
+    }
 }
