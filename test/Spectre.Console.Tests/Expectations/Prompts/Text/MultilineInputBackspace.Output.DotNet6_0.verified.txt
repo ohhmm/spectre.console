@@ -1,0 +1,21 @@
+[DEBUG] After Backspace 1: This is a long input that spans multiple lines.
+Continuing on a new line.
+[DEBUG] After Backspace 2: This is a long input that spans multiple lines.
+Continuing on a new line
+[DEBUG] After Backspace 3: This is a long input that spans multiple lines.
+Continuing on a new lin
+[DEBUG] After Backspace 4: This is a long input that spans multiple lines.
+Continuing on a new li
+[DEBUG] After Backspace 5: This is a long input that spans multiple lines.
+Continuing on a new l
+[DEBUG] After Backspace 6: This is a long input that spans multiple lines.
+Continuing on a new
+[DEBUG] After Backspace 7: This is a long input that spans multiple lines.
+Continuing on a new
+[DEBUG] After Backspace 8: This is a long input that spans multiple lines.
+Continuing on a ne
+[DEBUG] After Backspace 9: This is a long input that spans multiple lines.
+Continuing on a n
+[DEBUG] After Backspace 10: This is a long input that spans multiple lines.
+Continuing on a
+Enter multiline text: This is a long input that spans multiple lines.
