@@ -92,7 +92,6 @@ namespace Spectre.Console
                     console.WriteLine($"[DEBUG] Cursor Position: ({cursorLeft}, {cursorTop})");
                     console.WriteLine($"[DEBUG] Text: {text}");
                     console.WriteLine($"[DEBUG] Last NewLine Index: {lastNewLineIndex}");
-
                     continue;
                 }
 
