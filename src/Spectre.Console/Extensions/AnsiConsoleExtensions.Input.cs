@@ -90,6 +90,7 @@ namespace Spectre.Console
                     // Debugging: Log cursor position and text state
                     console.WriteLine($"[DEBUG] Cursor Position: ({cursorLeft}, {cursorTop})");
                     console.WriteLine($"[DEBUG] Text: {text}");
+                    console.WriteLine($"[DEBUG] Last NewLine Index: {lastNewLineIndex}");
 
                     continue;
                 }
