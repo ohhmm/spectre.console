@@ -50,6 +50,7 @@ namespace Spectre.Console
                     }
                 }
 
+                var lastNewLineIndex = -1;
                 if (key.Key == ConsoleKey.Backspace)
                 {
                     if (text.Length > 0)
@@ -59,7 +60,6 @@ namespace Spectre.Console
 
                         // Move the cursor back one position
                         cursorLeft--;
-                        int lastNewLineIndex = -1;
                         if (cursorLeft < 0)
                         {
                             cursorTop--;
