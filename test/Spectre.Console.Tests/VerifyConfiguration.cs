@@ -15,8 +15,6 @@ namespace Spectre.Console.Tests
             });
 
             VerifierSettings.DisableRequireUniquePrefix();
-            VerifierSettings.UseDirectory("Snapshots");
-            VerifierSettings.UseFileName("CustomFileName");
             VerifierSettings.UniqueForRuntime();
             VerifierSettings.UniqueForRuntimeAndVersion();
         }
