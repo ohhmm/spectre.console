@@ -1,18 +1,24 @@
-namespace Spectre.Console.Tests;
-
-public static class VerifyConfiguration
+namespace Spectre.Console.Tests
 {
-    [ModuleInitializer]
-    public static void Init()
+    public static class VerifyConfiguration
     {
-        Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
+        [ModuleInitializer]
+        public static void Init()
         {
-            var directory = Path.GetDirectoryName(sourceFile);
-            var className = type.Name;
-            var methodName = method.Name;
-            var fileName = $"{className}.{methodName}.verified.txt";
-            AnsiConsole.MarkupLine($"[DEBUG] Custom DerivePathInfo: {directory}/{fileName}"); // Debugging: Log the derived path info
-            return new(directory, fileName);
-        });
+            Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
+            {
+                var directory = Path.GetDirectoryName(sourceFile);
+                var className = type.Name;
+                var methodName = method.Name;
+                var fileName = $"{className}.{methodName}";
+                return new(directory, fileName);
+            });
+
+            VerifierSettings.DisableRequireUniquePrefix();
+            VerifierSettings.UseDirectory("Snapshots");
+            VerifierSettings.UseFileName("CustomFileName");
+            VerifierSettings.UniqueForRuntime();
+            VerifierSettings.UniqueForRuntimeAndVersion();
+        }
     }
 }
