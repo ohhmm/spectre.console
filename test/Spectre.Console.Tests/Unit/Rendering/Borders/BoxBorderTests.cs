@@ -208,7 +208,7 @@ public sealed class BoxBorderTests
             table.AddColumn("Header2");
             table.AddRow("Cell1", "Cell2");
             table.AddRow("Cell3", "Cell4");
-            table.AddFooter("Footer");
+            table.AddRow("Footer", ""); // Add footer content as a row
 
             return new Panel(table)
                 .Header("Greeting");
