@@ -18,6 +18,10 @@ namespace Spectre.Console.Tests
                 return new(directory, fileName);
             });
 
+            var settings = new VerifySettings();
+            settings.UseDirectory("Snapshots");
+            settings.UseFileName($"{type.Name}.{method.Name}");
+
             VerifierSettings.DisableRequireUniquePrefix();
             VerifierSettings.UniqueForRuntime();
             VerifierSettings.UniqueForRuntimeAndVersion();
