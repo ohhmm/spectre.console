@@ -9,6 +9,10 @@ namespace Spectre.Console.Tests
         [ModuleInitializer]
         public static void Init()
         {
+            VerifierSettings.DisableRequireUniquePrefix();
+            VerifierSettings.UniqueForRuntime();
+            VerifierSettings.UniqueForRuntimeAndVersion();
+
             Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
             {
                 var directory = Path.Combine(projectDirectory, "Snapshots");
@@ -18,9 +22,6 @@ namespace Spectre.Console.Tests
                 var settings = new VerifySettings();
                 settings.UseDirectory(directory);
                 settings.UseFileName(fileName);
-                VerifierSettings.DisableRequireUniquePrefix();
-                VerifierSettings.UniqueForRuntime();
-                VerifierSettings.UniqueForRuntimeAndVersion();
                 return new(directory, fileName);
             });
         }
