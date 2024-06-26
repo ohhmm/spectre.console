@@ -424,7 +424,7 @@ public sealed class TextPromptTests
         {
             console.Input.PushKey(ConsoleKey.Backspace);
             // Debugging: Log the state of the input after each backspace key press
-            console.WriteLine($"[DEBUG] After Backspace {i + 1}: {console.Input.GetInputBuffer()}");
+            console.WriteLine($"[DEBUG] After Backspace {i + 1}: {console.Input.GetInputBuffer().Replace("\b", "")}");
         }
         console.Input.PushKey(ConsoleKey.Enter);
 
