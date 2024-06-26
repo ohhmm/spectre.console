@@ -1,104 +1,120 @@
-namespace Spectre.Console.Testing;
-
-/// <summary>
-/// Represents a testable console input mechanism.
-/// </summary>
-public sealed class TestConsoleInput : IAnsiConsoleInput
+namespace Spectre.Console.Testing
 {
-    private readonly Queue<ConsoleKeyInfo> _input;
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="TestConsoleInput"/> class.
+    /// Represents a testable console input mechanism.
     /// </summary>
-    public TestConsoleInput()
+    public sealed class TestConsoleInput : IAnsiConsoleInput
     {
-        _input = new Queue<ConsoleKeyInfo>();
-    }
+        private readonly Queue<ConsoleKeyInfo> _input;
 
-    /// <summary>
-    /// Pushes the specified text to the input queue.
-    /// </summary>
-    /// <param name="input">The input string.</param>
-    public void PushText(string input)
-    {
-        if (input is null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestConsoleInput"/> class.
+        /// </summary>
+        public TestConsoleInput()
         {
-            throw new ArgumentNullException(nameof(input));
+            _input = new Queue<ConsoleKeyInfo>();
         }
 
-        foreach (var character in input)
+        /// <summary>
+        /// Pushes the specified text to the input queue.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        public void PushText(string input)
         {
-            PushCharacter(character);
-        }
-    }
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
 
-    /// <summary>
-    /// Pushes the specified text followed by 'Enter' to the input queue.
-    /// </summary>
-    /// <param name="input">The input.</param>
-    public void PushTextWithEnter(string input)
-    {
-        PushText(input);
-        PushKey(ConsoleKey.Enter);
-    }
-
-    /// <summary>
-    /// Pushes the specified character to the input queue.
-    /// </summary>
-    /// <param name="input">The input.</param>
-    public void PushCharacter(char input)
-    {
-        var control = char.IsUpper(input);
-        _input.Enqueue(new ConsoleKeyInfo(input, (ConsoleKey)input, false, false, control));
-    }
-
-    /// <summary>
-    /// Pushes the specified key to the input queue.
-    /// </summary>
-    /// <param name="input">The input.</param>
-    public void PushKey(ConsoleKey input)
-    {
-        _input.Enqueue(new ConsoleKeyInfo((char)input, input, false, false, false));
-    }
-
-    /// <summary>
-    /// Pushes the specified key to the input queue.
-    /// </summary>
-    /// <param name="consoleKeyInfo">The input.</param>
-    public void PushKey(ConsoleKeyInfo consoleKeyInfo)
-    {
-        _input.Enqueue(consoleKeyInfo);
-    }
-
-    /// <inheritdoc/>
-    public bool IsKeyAvailable()
-    {
-        return _input.Count > 0;
-    }
-
-    /// <inheritdoc/>
-    public ConsoleKeyInfo? ReadKey(bool intercept)
-    {
-        if (_input.Count == 0)
-        {
-            throw new InvalidOperationException("No input available.");
+            foreach (var character in input)
+            {
+                PushCharacter(character);
+            }
         }
 
-        return _input.Dequeue();
-    }
+        /// <summary>
+        /// Pushes the specified text followed by 'Enter' to the input queue.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        public void PushTextWithEnter(string input)
+        {
+            PushText(input);
+            PushKey(ConsoleKey.Enter);
+        }
 
-    /// <inheritdoc/>
-    public Task<ConsoleKeyInfo?> ReadKeyAsync(bool intercept, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(ReadKey(intercept));
-    }
+        /// <summary>
+        /// Pushes the specified character to the input queue.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        public void PushCharacter(char input)
+        {
+            var control = char.IsUpper(input);
+            _input.Enqueue(new ConsoleKeyInfo(input, (ConsoleKey)input, false, false, control));
+        }
 
-    /// <summary>
-    /// Gets the current state of the input buffer as a string.
-    /// </summary>
-    /// <returns>The input buffer content as a string.</returns>
-    public string GetInputBuffer()
-    {
-        return new string(_input.Select(keyInfo => keyInfo.KeyChar).ToArray());
+        /// <summary>
+        /// Pushes the specified key to the input queue.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        public void PushKey(ConsoleKey input)
+        {
+            _input.Enqueue(new ConsoleKeyInfo((char)input, input, false, false, false));
+        }
+
+        /// <summary>
+        /// Pushes the specified key to the input queue.
+        /// </summary>
+        /// <param name="consoleKeyInfo">The input.</param>
+        public void PushKey(ConsoleKeyInfo consoleKeyInfo)
+        {
+            _input.Enqueue(consoleKeyInfo);
+        }
+
+        /// <inheritdoc/>
+        public bool IsKeyAvailable()
+        {
+            return _input.Count > 0;
+        }
+
+        /// <inheritdoc/>
+        public ConsoleKeyInfo? ReadKey(bool intercept)
+        {
+            if (_input.Count == 0)
+            {
+                throw new InvalidOperationException("No input available.");
+            }
+
+            return _input.Dequeue();
+        }
+
+        /// <inheritdoc/>
+        public Task<ConsoleKeyInfo?> ReadKeyAsync(bool intercept, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(ReadKey(intercept));
+        }
+
+        /// <summary>
+        /// Gets the current state of the input buffer as a string.
+        /// </summary>
+        /// <returns>The input buffer content as a string.</returns>
+        public string GetInputBuffer()
+        {
+            var buffer = new List<char>();
+            foreach (var keyInfo in _input)
+            {
+                if (keyInfo.Key == ConsoleKey.Backspace)
+                {
+                    if (buffer.Count > 0)
+                    {
+                        buffer.RemoveAt(buffer.Count - 1);
+                    }
+                }
+                else
+                {
+                    buffer.Add(keyInfo.KeyChar);
+                }
+            }
+            return new string(buffer.ToArray());
+        }
     }
 }
