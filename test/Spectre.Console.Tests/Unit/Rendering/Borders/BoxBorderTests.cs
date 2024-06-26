@@ -204,13 +204,14 @@ public sealed class BoxBorderTests
         public static Panel GetPanel()
         {
             var table = new Table();
-            table.AddColumn("Header1");
-            table.AddColumn("Header2");
-            table.AddRow("Cell1", "Cell2");
-            table.AddRow("Cell3", "Cell4");
-            table.AddRow("Footer", ""); // Add footer content as a row
+            table.AddColumn("Header 1");
+            table.AddColumn("Header 2");
+            table.AddRow("Cell", "Cell");
+            table.AddRow("Cell", "Cell");
+            table.AddRow("Footer 1", "Footer 2"); // Add footer content as a row
 
             var panel = new Panel(table);
+            panel.Header = null; // Ensure no header is added to the panel
 
             return panel;
         }
