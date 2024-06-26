@@ -5,6 +5,14 @@ public static class VerifyConfiguration
     [ModuleInitializer]
     public static void Init()
     {
-        Verifier.DerivePathInfo(Expectations.Initialize);
+        Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
+        {
+            var directory = Path.GetDirectoryName(sourceFile);
+            var className = type.Name;
+            var methodName = method.Name;
+            var fileName = $"{className}.{methodName}.verified.txt";
+            Console.WriteLine($"[DEBUG] Custom DerivePathInfo: {directory}/{fileName}"); // Debugging: Log the derived path info
+            return new(directory, fileName);
+        });
     }
 }
