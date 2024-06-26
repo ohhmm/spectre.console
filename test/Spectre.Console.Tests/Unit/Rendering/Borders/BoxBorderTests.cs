@@ -203,7 +203,14 @@ public sealed class BoxBorderTests
     {
         public static Panel GetPanel()
         {
-            return new Panel("Hello World")
+            var table = new Table();
+            table.AddColumn("Header1");
+            table.AddColumn("Header2");
+            table.AddRow("Cell1", "Cell2");
+            table.AddRow("Cell3", "Cell4");
+            table.AddFooter("Footer");
+
+            return new Panel(table)
                 .Header("Greeting");
         }
     }
