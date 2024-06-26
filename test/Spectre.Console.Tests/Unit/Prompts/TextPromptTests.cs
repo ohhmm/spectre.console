@@ -413,7 +413,7 @@ public sealed class TextPromptTests
 
     [Fact]
     [Expectation("MultilineInputBackspace")]
-    public Task Should_Handle_Backspace_Correctly_For_Multiline_Input_DotNet8_0()
+    public Task Should_Handle_Backspace_Correctly_For_Multiline_Input()
     {
         // Given
         var console = new TestConsole();
