@@ -11,7 +11,7 @@ public static class VerifyConfiguration
             var className = type.Name;
             var methodName = method.Name;
             var fileName = $"{className}.{methodName}.verified.txt";
-            Console.WriteLine($"[DEBUG] Custom DerivePathInfo: {directory}/{fileName}"); // Debugging: Log the derived path info
+            AnsiConsole.MarkupLine($"[DEBUG] Custom DerivePathInfo: {directory}/{fileName}"); // Debugging: Log the derived path info
             return new(directory, fileName);
         });
     }
