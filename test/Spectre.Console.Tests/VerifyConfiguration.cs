@@ -15,16 +15,14 @@ namespace Spectre.Console.Tests
                 var className = type.Name;
                 var methodName = method.Name;
                 var fileName = $"{className}.{methodName}";
+                var settings = new VerifySettings();
+                settings.UseDirectory(directory);
+                settings.UseFileName(fileName);
+                VerifierSettings.DisableRequireUniquePrefix();
+                VerifierSettings.UniqueForRuntime();
+                VerifierSettings.UniqueForRuntimeAndVersion();
                 return new(directory, fileName);
             });
-
-            var settings = new VerifySettings();
-            settings.UseDirectory("Snapshots");
-            settings.UseFileName($"{type.Name}.{method.Name}");
-
-            VerifierSettings.DisableRequireUniquePrefix();
-            VerifierSettings.UniqueForRuntime();
-            VerifierSettings.UniqueForRuntimeAndVersion();
         }
     }
 }
