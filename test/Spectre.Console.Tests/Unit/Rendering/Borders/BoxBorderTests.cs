@@ -210,8 +210,10 @@ public sealed class BoxBorderTests
             table.AddRow("Cell3", "Cell4");
             table.AddRow("Footer", ""); // Add footer content as a row
 
-            return new Panel(table)
+            var panel = new Panel(table)
                 .Header("Greeting");
+
+            return panel;
         }
     }
 }
