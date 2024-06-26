@@ -412,7 +412,7 @@ public sealed class TextPromptTests
     }
 
     [Fact]
-    [Expectation("MultilineInputBackspace.Output.DotNet6_0")]
+    [Expectation("MultilineInputBackspace.DotNet6_0")]
     public Task Should_Handle_Backspace_Correctly_For_Multiline_Input()
     {
         // Given
@@ -436,7 +436,7 @@ public sealed class TextPromptTests
     }
 
     [Fact]
-    [Expectation("MultilineInputBackspace.Output.DotNet7_0")]
+    [Expectation("MultilineInputBackspace.DotNet7_0")]
     public Task Should_Handle_Backspace_Correctly_For_Multiline_Input_DotNet7_0()
     {
         // Given
@@ -461,6 +461,30 @@ public sealed class TextPromptTests
 
     [Fact]
     [Expectation("MultilineInputBackspace.Output.DotNet8_0")]
+    public Task Should_Handle_Backspace_Correctly_For_Multiline_Input_DotNet8_0()
+    {
+        // Given
+        var console = new TestConsole();
+        console.Input.PushText("This is a long input that spans multiple lines.");
+        console.Input.PushKey(ConsoleKey.Enter);
+        console.Input.PushText("Continuing on a new line.");
+        for (int i = 0; i < 10; i++)
+        {
+            console.Input.PushKey(ConsoleKey.Backspace);
+            // Debugging: Log the state of the input after each backspace key press
+            console.WriteLine($"[DEBUG] After Backspace {i + 1}: {console.Input.GetInputBuffer().Replace("\b", "")}");
+        }
+        console.Input.PushKey(ConsoleKey.Enter);
+
+        // When
+        var result = console.Prompt(new TextPrompt<string>("Enter multiline text:"));
+
+        // Then
+        return Verifier.Verify(console.Output);
+    }
+
+    [Fact]
+    [Expectation("MultilineInputBackspace.DotNet8_0")]
     public Task Should_Handle_Backspace_Correctly_For_Multiline_Input_DotNet8_0()
     {
         // Given
