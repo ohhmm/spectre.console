@@ -88,6 +88,10 @@ namespace Spectre.Console
                         console.Cursor.SetPosition(cursorLeft, cursorTop);
                     }
 
+                    // Debug statements to log the state of the input buffer and cursor position
+                    console.WriteLine($"[DEBUG] After Backspace: {text}");
+                    console.WriteLine($"[DEBUG] Cursor Position: Left={cursorLeft}, Top={cursorTop}");
+
                     continue;
                 }
 
