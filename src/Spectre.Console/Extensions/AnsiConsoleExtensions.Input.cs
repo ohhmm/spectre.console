@@ -79,7 +79,7 @@ namespace Spectre.Console
                                 }
                                 else
                                 {
-                                    cursorLeft = cursorLeft < 0 ? 0 : cursorLeft;
+                                    cursorLeft = 0;
                                 }
                             }
                         }
