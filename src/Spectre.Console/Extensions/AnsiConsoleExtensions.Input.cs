@@ -78,7 +78,7 @@ namespace Spectre.Console
                                 }
                                 else
                                 {
-                                    cursorLeft = text.Length;
+                                    cursorLeft = console.Profile.Width - 1;
                                 }
                             }
                         }
@@ -88,10 +88,6 @@ namespace Spectre.Console
                         console.Cursor.SetPosition(cursorLeft, cursorTop);
                     }
 
-                    // Debugging: Log cursor position and text state
-                    console.WriteLine($"[DEBUG] Cursor Position: ({cursorLeft}, {cursorTop})");
-                    console.WriteLine($"[DEBUG] Text: {text}");
-                    console.WriteLine($"[DEBUG] Last NewLine Index: {lastNewLineIndex}");
                     continue;
                 }
 
