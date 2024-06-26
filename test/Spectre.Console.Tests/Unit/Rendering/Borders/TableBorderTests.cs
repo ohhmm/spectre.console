@@ -35,7 +35,7 @@ public sealed class TableBorderTests
             // Given
             var console = new TestConsole();
             var table = Fixture.GetTable().NoBorder();
-            Console.WriteLine($"Table Border: {table.Border}");
+            System.Console.WriteLine($"Table Border: {table.Border}");
 
             // When
             console.Write(table);
