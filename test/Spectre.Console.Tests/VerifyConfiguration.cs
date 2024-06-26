@@ -1,3 +1,7 @@
+using System.IO;
+using System.Runtime.CompilerServices;
+using VerifyTests;
+
 namespace Spectre.Console.Tests
 {
     public static class VerifyConfiguration
@@ -7,7 +11,7 @@ namespace Spectre.Console.Tests
         {
             Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
             {
-                var directory = Path.GetDirectoryName(sourceFile);
+                var directory = Path.Combine(projectDirectory, "Snapshots");
                 var className = type.Name;
                 var methodName = method.Name;
                 var fileName = $"{className}.{methodName}";
